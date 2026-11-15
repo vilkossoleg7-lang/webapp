@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROCKET Music</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { 
+            background-color: #0f0f0f; color: white; 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0; padding: 15px; 
+        }
+        h1 { text-align: center; font-size: 22px; margin-bottom: 20px; color: #ff4757; }
+        .track { 
+            background: #1e1e1e; border-radius: 12px; padding: 15px; 
+            margin-bottom: 12px; display: flex; justify-content: space-between; 
+            align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .track-info { display: flex; flex-direction: column; }
+        .track-title { font-weight: bold; font-size: 16px; margin-bottom: 4px; }
+        .track-artist { color: #888; font-size: 13px; }
+        button { 
+            background-color: #ff4757; color: white; border: none; 
+            padding: 10px 18px; border-radius: 20px; font-weight: bold; 
+            cursor: pointer; transition: 0.2s;
+        }
+        button:active { background-color: #ff6b81; transform: scale(0.95); }
+    </style>
+</head>
+<body>
+    <h1>🎧 ROCKET Music</h1>
+    <div id="track-list"></div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand(); 
+
+        const tracks = [
+            { title: "Кишлак - Слёзы", artist: "Кишлак", query: "Кишлак Слёзы" },
+            { title: "FACE - Красной помадой", artist: "FACE", query: "FACE Красной помадой" },
+            { title: "Мукка - Всем пиздец", artist: "Мукка", query: "Мукка Всем пиздец" },
+            { title: "Гуф - Я не знаю", artist: "Гуф", query: "Гуф Я не знаю" },
+            { title: "Пошлая Молли - Рвать себя на куски", artist: "Пошлая Молли", query: "Пошлая Молли Рвать себя на куски" },
+            { title: "Нервы - Молчит экран", artist: "Нервы", query: "Нервы Молчит экран" }
+        ];
+
+        const trackList = document.getElementById('track-list');
+
+        tracks.forEach(track => {
+            const div = document.createElement('div');
+            div.className = 'track';
+            div.innerHTML = 
+                <div class="track-info">
+                    <span class="track-title">${track.title}</span>
+                    <span class="track-artist">${track.artist}</span>
+                </div>
+                <button onclick="downloadTrack('${track.query}')">Скачать</button>
+            ;
+            trackList.appendChild(div);
+        });
+
+        function downloadTrack(query) {
+            tg.sendData(JSON.stringify({ action: "download", query: query }));
+            tg.close(); 
+        }
+    </script>
+</body>
+</html>
